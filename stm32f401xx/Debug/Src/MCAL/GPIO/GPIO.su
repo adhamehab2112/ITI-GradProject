@@ -1,0 +1,4 @@
+GPIO.c:19:6:MCAL_GPIOx_Init	16	static
+GPIO.c:137:6:MCAL_GPIOx_Pin_Write	16	static
+GPIO.c:157:9:MCAL_GPIOx_Pin_Read	16	static
+GPIO.c:165:6:MCAL_GPIOx_Port_Write	16	static
