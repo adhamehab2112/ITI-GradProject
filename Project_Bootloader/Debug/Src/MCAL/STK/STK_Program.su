@@ -1,0 +1,10 @@
+STK_Program.c:16:6:MCAL_SYSTK_voidInit	4	static
+STK_Program.c:32:6:MCAL_SYSTK_voidSetPreload	16	static
+STK_Program.c:46:11:MCAL_STK_u32GetRemaining	4	static
+STK_Program.c:50:11:MCAL_STK_u32GetElapsed	4	static
+STK_Program.c:54:11:MCAL_STK_u8ReadFlag	4	static
+STK_Program.c:59:6:MCAL_STK_voidDelayUsec	24	static
+STK_Program.c:74:8:MCAL_STK_voidDelayMsec	24	static
+STK_Program.c:90:9:MCAL_STK_voidCallBack	16	static
+STK_Program.c:95:6:MSTK_vSetInterval_periodic	16	static
+STK_Program.c:108:6:SysTick_Handler	8	static
