@@ -1,38 +1,42 @@
 /*
  * STK_Private.h
  *
- *  Created on: Aug 15, 2023
- *      Author: Adham Ehab
+ *  Created on: Sep 10, 2023
+ *      Author: adham
  */
-
 #ifndef MCAL_STK_STK_PRIVATE_H_
 #define MCAL_STK_STK_PRIVATE_H_
+/*************************************File Includes*******************************************/
+#include"../../INC/STD_TYPES.h"
+/*********************************************************************************************/
 
-#include "../../INC/STD_TYPES.h"
+/*************************************STK Base Address****************************************/
+#define STK_BASE_ADDRESS			0xE000E010
+/*********************************************************************************************/
 
-/************************STK Registers**********************/
+/************************************STK Registers Struct*************************************/
 typedef struct
 {
-	volatile uint32_t STK_CTRL 		;
-	volatile uint32_t STK_LOAD		;
-	volatile uint32_t STK_VAL		;
-	volatile uint32_t STK_CALIB		;
+volatile uint32_t STK_CTRL  ;
+volatile uint32_t STK_LOAD  ;
+volatile uint32_t STK_VAL   ;
+volatile uint32_t STK_CALIB ;
 
 }STK_Registers_t;
+/*********************************************************************************************/
 
-/************************Base addresses***********************/
-#define STK_BASE 					0xE000E010
+/*************************************STK Peripheral instance*********************************/
+#define STK			((volatile STK_Registers_t*)STK_BASE_ADDRESS)
+/*********************************************************************************************/
 
-/**********************Instant***********************/
-#define STK 						((volatile STK_Registers_t*)STK_BASE)
+/***************************************Registers Macros**************************************/
+//@1-CTRL
+#define CTRL_ENABLE				0
+#define CTRL_TICKINT			1
+#define CTRL_CLKSOURCE			2
+#define CTRL_COUNTFLAG			16
 
-/**********************Macros*********************/
 
-/*Control Register Bits*/
-#define ENABLE				0
-#define TICKINT				1
-#define CLKSOURCE			2
-#define COUNTFLAG			16
-
+/*********************************************************************************************/
 
 #endif /* MCAL_STK_STK_PRIVATE_H_ */

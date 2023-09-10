@@ -1,115 +1,120 @@
 /*
- * STK.c
+ * STK_Program.c
  *
- *  Created on: Aug 15, 2023
- *      Author: Adham Ehab
+ *  Created on: Sep 10, 2023
+ *      Author: adham
  */
 
-#include "STK_Private.h"
-#include "STK_Config.h"
-#include "STK_Interface.h"
+/*************************************File Includes*******************************************/
+#include"STK_Interface.h"
+#include"STK_Config.h"
+/*********************************************************************************************/
 
-/****************************Global Variables*****************************/
-static void (*GlobalcallBackPtr)(void) = NULL ;
+/*************************************Global Variables****************************************/
+static void (*GL_CallBack)(void) = NULL ;
+static uint8_t	GL_PeridoicFlag = 0 ;
+/*********************************************************************************************/
 
-/******************************APIs Implementation************************/
-void MCAL_SYSTK_voidInit(void)
+/************************************APIs Implementation**************************************/
+void MCAL_STK_Init(void)
 {
-#if	STK_CLK_SOURCE==STK_CLK_SOURCE_AHB
-	SET_BIT(STK->STK_CTRL,CLKSOURCE);
-#elif  STK_CLK_SOURCE==STK_CLK_SOURCE_AHB_DIV_8
-	CLR_BIT(STK->STK_CTRL,CLKSOURCE);
-#endif
-
-#if	STK_INT_SOURCE==STK_INT_SOURCE_ENABLE
-	SET_BIT(STK->STK_CTRL,TICKINT);
-#elif  STK_INT_SOURCE==STK_INT_SOURCE_DISABLE
-	CLR_BIT(STK->STK_CTRL,TICKINT);
-
-#endif
+	/*1-Clock Source Selection*/
+	if(STK_CLK_SRC == STK_AHB)
+	{
+		SET_BIT(STK->STK_CTRL,CTRL_CLKSOURCE);
+	}
+	else
+	{
+		//AHB_DIV8 By Default
+		/*Nothing*/
+	}
+	/*2-Interrupt State*/
+	if(STK_IRQ_STATE == STK_IRQ_EN)
+	{
+		SET_BIT(STK->STK_CTRL,CTRL_CLKSOURCE);
+	}
+	else
+	{
+		//IRQ Disable by default
+		/*Nothing*/
+	}
 }
 
-void MCAL_SYSTK_voidSetPreload(uint32_t Value)
+
+void MCAL_STK_BusyWait(uint32_t Ticks)
 {
-
-	/*
-	 * 	load -> Preloadvalue
-		value = 0
-		enable SYSTIK
-	 */
-	STK->STK_LOAD = Value;			/* load reload value */
-	STK->STK_VAL  = 0;				/* clear value register */
-	SET_BIT(STK->STK_CTRL,ENABLE);	/* enable STK */
-
+	/*1-Reset the timer Value Register*/
+	STK->STK_VAL = 0 ;
+	/*2-Load the Value in the Value Register*/
+	STK->STK_LOAD = Ticks ;
+	/*3-Start The timer*/
+	SET_BIT(STK->STK_CTRL,CTRL_ENABLE);
+	/*4-Wait until down flow*/
+	while(!GET_BIT(STK->STK_CTRL,CTRL_COUNTFLAG));
+	/*5-Stop the timer*/
+	CLR_BIT(STK->STK_CTRL,CTRL_ENABLE);
 }
 
-uint32_t  MCAL_STK_u32GetRemaining(void)					/* Get remaining time */
+void MCAL_STK_Dealy_us(uint32_t Time)
 {
+	uint32_t NumberOfTicks = Time*2 ;
+	MCAL_STK_BusyWait(NumberOfTicks) ;
+}
+void MCAL_STK_Dealy_ms(uint32_t Time)
+{
+	uint32_t NumberOfTicks = Time*2000 ;
+	MCAL_STK_BusyWait(NumberOfTicks) ;
+}
+void MCAL_STK_Set_Interval_Periodic(uint32_t Ticks , void(*callBack)(void))
+{
+	/*1-Set Call back function*/
+	GL_CallBack = callBack ;
+	/*2-Reset the timer Value Register*/
+	STK->STK_VAL = 0 ;
+	/*3-Load the Value in the Value Register*/
+	STK->STK_LOAD = Ticks ;
+	/*4-Start The timer*/
+	SET_BIT(STK->STK_CTRL,CTRL_ENABLE);
+	/*5-Set the Periodic Flag */
+	GL_PeridoicFlag = 1 ;
+}
+void MCAL_STK_Set_Interval_Single(uint32_t Ticks , void(*callBack)(void))
+{
+	/*1-Set Call back function*/
+	GL_CallBack = callBack ;
+	/*2-Reset the timer Value Register*/
+	STK->STK_VAL = 0 ;
+	/*3-Load the Value in the Value Register*/
+	STK->STK_LOAD = Ticks ;
+	/*4-Start The timer*/
+	SET_BIT(STK->STK_CTRL,CTRL_ENABLE);
+	/*5-Set the Periodic Flag */
+	GL_PeridoicFlag = 0 ;
+}
+uint32_t MCAL_STK_Get_ElapsedTime(void)
+{
+	//3ada wa2t 2ad eh
+	return (STK->STK_LOAD - STK->STK_VAL);
+
+}
+uint32_t MCAL_STK_Get_RemainingTime(void)
+{
+	//Fadely wa2t 2ad eh
 	return STK->STK_VAL;
 }
-uint32_t  MCAL_STK_u32GetElapsed(void)					/* Get elapsed time */
-{
-	return (STK->STK_LOAD - STK->STK_VAL);
-}
-uint8_t	  MCAL_STK_u8ReadFlag(void)
-{
-	return GET_BIT(STK->STK_CTRL,COUNTFLAG);
-}
+/*********************************************************************************************/
 
-void MCAL_STK_voidDelayUsec(uint32_t DelayUsec) 		/* Delay in microsecond */
-{
-	MCAL_STK_voidInit();
-	uint32_t TICKn;
-#if	STK_CLK_SOURCE==STK_CLK_SOURCE_AHB
-	TICKn=(DelayUsec * F_CPU_MHZ);
-#elif  STK_CLK_SOURCE==STK_CLK_SOURCE_AHB_DIV_8
-	TICKn=(DelayUsec * (F_CPU_MHZ/8));
-#endif
-	STK->STK_VAL  = 0;				/* clear value register */
-	STK->STK_LOAD = TICKn;			/* load reload value */
-	while(!MCAL_STK_u8ReadFlag());
-	CLR_BIT(STK->STK_CTRL,ENABLE);	/*Stop Timer */
-
-}
-void	  MCAL_STK_voidDelayMsec(uint32_t DelayMsec)		/* Delay in milliseconds */
-{
-	MCAL_STK_voidInit();
-	uint32_t TICKn;
-#if	STK_CLK_SOURCE==STK_CLK_SOURCE_AHB
-	TICKn=(DelayMsec * F_CPU_MHZ * 1000);
-#elif  STK_CLK_SOURCE==STK_CLK_SOURCE_AHB_DIV_8
-	TICKn=(DelayMsec * (F_CPU_MHZ/8)*1000);
-#endif
-	STK->STK_VAL  = 0;				/* clear value register */
-	STK->STK_LOAD = TICKn;			/* load reload value */
-	while(!MCAL_STK_u8ReadFlag());
-	CLR_BIT(STK->STK_CTRL,ENABLE); 	/*Stop Timer */
-
-}
-
-void 	  MCAL_STK_voidCallBack(void(*ptr)(void)) 			/* CallBack Function */
-{
-	GlobalcallBackPtr = ptr ;
-}
-
-void MSTK_vSetInterval_periodic (uint32_t A_u32Ticks, void (*CallbackFunction) (void))
-{
-	/* 0- set Callback function */
-		GlobalcallBackPtr = CallbackFunction;
-		/* 1- reset timer value */
-		STK->STK_VAL = 0;
-		/* 2- Load timer with Value */
-		STK->STK_LOAD = A_u32Ticks;
-		/*3- Start the timer */
-		SET_BIT(STK->STK_CTRL, ENABLE);
-}
-
-/***********************IRQ Handler***********************/
+/*******************************************IRQ Handler***************************************/
 void SysTick_Handler(void)
 {
-	if(GlobalcallBackPtr != NULL)
+	if(GL_CallBack != NULL)
 	{
-		GlobalcallBackPtr();
+		GL_CallBack();
 	}
-
+	if(GL_PeridoicFlag !=1)
+	{
+		/*Stop the timer*/
+		CLR_BIT(STK->STK_CTRL,CTRL_ENABLE);
+	}
 }
+/*********************************************************************************************/
