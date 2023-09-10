@@ -1,3 +1,0 @@
-RCC_Program.c:19:6:MCAL_RCC_voidInit	24	static
-RCC_Program.c:84:6:MCAL_RCC_voidPeripheral_EN	16	static
-RCC_Program.c:107:6:MCAL_RCC_voidPeripheral_DIS	16	static
