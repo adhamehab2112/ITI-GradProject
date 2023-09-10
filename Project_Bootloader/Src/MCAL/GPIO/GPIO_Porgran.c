@@ -95,13 +95,13 @@ void MCAL_GPIOx_Init(GPIOx_Registers_t *GPIOx,GPIOx_Config_t *Config)
 			}
 		}
 
-		if(Config->GPIO_PIN_NUMBER <=0 || Config->GPIO_PIN_NUMBER <8)
+		if(Config->GPIO_PIN_NUMBER >=0 && Config->GPIO_PIN_NUMBER <8)
 		{
-			GPIOx->GPIOx_AFRL |= (Config->AFIO_SELECT<<(Config->GPIO_PIN_NUMBER<<2));
+			GPIOx->GPIOx_AFRL |= (Config->AFIO_SELECT<<(Config->GPIO_PIN_NUMBER * 4));
 		}
 		else
 		{
-			GPIOx->GPIOx_AFRH |= (Config->AFIO_SELECT<<(Config->GPIO_PIN_NUMBER<<2));
+			GPIOx->GPIOx_AFRH |= (uint32_t)(Config->AFIO_SELECT<<(Config->GPIO_PIN_NUMBER % 8)*4);
 		}
 		switch(Config->GPIO_PIN_OUT_SPEED)
 		{

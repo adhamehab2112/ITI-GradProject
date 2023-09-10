@@ -37,6 +37,9 @@ typedef struct {
 #define GPIOB_PERIPHERAL			1
 #define	GPIOC_PERIPHERAL			2
 #define SYSCFG_PERIPHERAL			14
+#define USART1_PERIPHERAL			4
+#define USART6_PERIPHERAL			5
+#define USART2_PERIPHERAL			17
 
 //@ref : BUS_SELECT
 #define AHB1_BUS		0
@@ -124,6 +127,15 @@ typedef struct {
 void MCAL_RCC_voidInit(RCC_Config_t *config);
 void MCAL_RCC_voidPeripheral_EN(uint8_t Peripheral , uint8_t Bus);
 void MCAL_RCC_voidPeripheral_DIS(uint8_t Peripheral , uint8_t Bus);
+/*~*~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
+uint32_t MCALL_RCC_GetPCLK1Freq(void); //FOR APB1 BUS
+uint32_t MCALL_RCC_GetPCLK2Freq(void); //FOR APB2 BUS
+uint32_t MCALL_RCC_GetHCLKFreq(void) ; //FOR AHB BUS -> SYSCLK/prescaller
+uint32_t MCALL_RCC_GetSYSCLKFreq(void);// HSI 16mhz By Default
+/*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*/
+
+
+/*****************************************************************/
 
 
 #endif /* INC_RCC_INTERFACE_H_ */

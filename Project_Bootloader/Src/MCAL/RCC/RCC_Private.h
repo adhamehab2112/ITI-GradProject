@@ -74,5 +74,13 @@ typedef struct
 //@RCC_CFGR BITS MACROS
 #define SW0			0
 #define SW1			1
+//@RCC_CFGR SWS Macros
+#define HSI_SELECTED	0
+#define HSE_SELECTED	1
+#define PLL_SELECTED	2
+
+/***********************************RCC HSI clock value*******************************/
+#define HSI_CLK				(uint32_t)16000000
+/*************************************************************************************/
 
 #endif /* INC_STM32_F401XX_H_ */
