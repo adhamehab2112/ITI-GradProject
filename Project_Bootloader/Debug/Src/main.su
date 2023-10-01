@@ -1,5 +1,2 @@
-main.c:15:6:TASK1	8	static
-main.c:19:6:TASK2	8	static
-main.c:23:6:TASK3	8	static
-main.c:27:6:TASK4	8	static
-main.c:31:5:main	24	static
+main.c:35:6:STK_Callback	8	static
+main.c:54:5:main	48	static

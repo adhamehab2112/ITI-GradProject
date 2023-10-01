@@ -117,6 +117,7 @@ void MCAL_UART_DeInit(UART_Registers_t *UARTx);
 void MCAL_UART_GPIO_SetPins(UART_Registers_t *UARTx);
 void MCAL_UART_SendData(UART_Registers_t *UARTx,uint16_t *DataBuffer);
 void MCAL_UART_ReciveData(UART_Registers_t *UARTx,uint16_t *DataBuffer);
+uint8_t MCAL_UART_Recive_Byte_Synch(UART_Registers_t *UARTx,uint8_t *DataBuffer);
 void MCAL_UART_Wait_TC(UART_Registers_t *UARTx);
-void MCAL_UART_SendString(UART_Registers_t *UARTx , uint8_t Data[] , uint32_t length);
+void MCAL_UART_SendString(UART_Registers_t *UARTx , uint8_t Data[]);
 #endif /* MCAL_UASRT_UART_INTERFACE_H_ */

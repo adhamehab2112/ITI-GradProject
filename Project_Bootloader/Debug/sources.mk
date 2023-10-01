@@ -8,7 +8,6 @@ S_SRCS :=
 C_SRCS := 
 S_UPPER_SRCS := 
 O_SRCS := 
-OBJCOPY_HEX := 
 SIZE_OUTPUT := 
 OBJDUMP_LIST := 
 EXECUTABLES := 
@@ -20,14 +19,20 @@ OBJCOPY_BIN :=
 
 # Every subdirectory with source files must be described here
 SUBDIRS := \
+Src/APP \
+Src/APP/HEXPARSER \
 Src/HAL/KEYPAD \
 Src/HAL/LCD \
+Src/HAL/TFT \
 Src/MCAL/EXTI \
 Src/MCAL/FMI \
 Src/MCAL/GPIO \
 Src/MCAL/NVIC \
 Src/MCAL/RCC \
+Src/MCAL/SCB \
+Src/MCAL/SPI \
 Src/MCAL/STK \
+Src/MCAL/UASRT \
 Src/OS \
 Src \
 Startup \

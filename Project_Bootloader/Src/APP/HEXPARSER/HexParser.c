@@ -10,61 +10,80 @@
 #include"HexParser.h"
 #include"../../MCAL/FMI/FMI_Interface.h"
 /******************************************************************************/
-uint16_t Data[100];
-/******************************************************************************/
-void HexParser_EraseAppArea(void)
+
+#define FLASH_BASE_ADDR     0x08000000
+
+uint32_t address = 0x08000000 ;
+uint16_t DataBuffer[100] ;
+
+void HexParser_vEraseAppArea(void)
 {
 	MCALFMI_vMassErase();
 }
 
-/*Private Function*/
-static uint8_t HexParser_hex_to_ASCII(uint8_t Digit)
+static uint8_t HexParser_uint8_tAscii2Hex(uint8_t A_uint8_tAscii)
 {
-	uint8_t Ascii_value ;
-	if(Digit>='0' && Digit<='9')
+	uint8_t L_uint8_tHexValue = 0;
+
+	if(A_uint8_tAscii >= '0' && A_uint8_tAscii <= '9')
 	{
-		Ascii_value = Digit -'0';
+		L_uint8_tHexValue = A_uint8_tAscii - '0' ;
 	}
-	else(Digit>='A' && Digit <='F')
+	else if(A_uint8_tAscii >= 'A' && A_uint8_tAscii <='F')
 	{
-		Ascii_value = Digit - 55 ;
+		L_uint8_tHexValue = A_uint8_tAscii - 55 ; // 55='A'-10
 	}
-	return Ascii_value;
+	return L_uint8_tHexValue;
 }
 
-void HexParser_ParseData(uint8_t Record[])
+
+void HexParser_vParseData(uint8_t A_puint8_tData[])
 {
-	/*Character Count Variables*/
-	uint8_t CC , CC_Low , CC_High;
-	/*Convert the Character Count to ASCII*/
-	CC_low  = HexParser_hex_to_ASCII(Record[1]);
-	CC_High = HexParser_hex_to_ASCII(Record[2]);
-	CC = (CC_High <<4)|CC_low ;
+	/* charachter Count variables */
+	uint8_t CC_high, CC_low, CC ;
+
+	/* 4 digits for conversion */
+	uint8_t digit0,digit1,digit2,digit3 ;
+
+	/* Address variable */
 
 
+	/* 1- convert charachter count */
+	CC_high = HexParser_uint8_tAscii2Hex(A_puint8_tData[1]);
+	CC_low = HexParser_uint8_tAscii2Hex(A_puint8_tData[2]);
+	CC = (CC_high<<4)|CC_low ;
 
-	/*Low Part of Address Digits*/
-	uint8_t Digit0 , Digit1 , Digit2 , Digit3 ;
-	uint32_t Address=0;
-	Digit3 =  HexParser_hex_to_ASCII(Record[3]);
-	Digit2 =  HexParser_hex_to_ASCII(Record[4]);
-	Digit1 =  HexParser_hex_to_ASCII(Record[5]);
-	Digit0 =  HexParser_hex_to_ASCII(Record[6]);
+	/* 2- convert Address */
+	digit0 = HexParser_uint8_tAscii2Hex(A_puint8_tData[3]);
+	digit1 = HexParser_uint8_tAscii2Hex(A_puint8_tData[4]);
+	digit2 = HexParser_uint8_tAscii2Hex(A_puint8_tData[5]);
+	digit3 = HexParser_uint8_tAscii2Hex(A_puint8_tData[6]);
 
-	Address = (FLASH_APP_START_ADDRESS)|(Digit3<<12)|(Digit2<<8)|(Digit1<<4)|(Digit0<<0);
 
-	/*Start Converting the Data [9]->[40]*/
-	for(uint8_t itr=0 ; itr<(CC/2) ; itr++)
+	address &= 0xFFFF0000;
+	address = (FLASH_BASE_ADDR) |
+			  (digit0 << 12)    |
+			  (digit1 << 8 )    |
+			  (digit2 << 4 )    |
+			  (digit3 << 0 );
+
+	for(uint8_t i=0; i<(CC/2) ; i++)
 	{
-		Digit3 = HexParser_hex_to_ASCII(Record[(4*itr)+9]);
-		Digit2 = HexParser_hex_to_ASCII(Record[(4*itr)+10]);
-		Digit1 = HexParser_hex_to_ASCII(Record[(4*itr)+11]);
-		Digit0 = HexParser_hex_to_ASCII(Record[(4*itr)+12]);
+		digit0 = HexParser_uint8_tAscii2Hex(A_puint8_tData[(4*i)+9]);
+		digit1 = HexParser_uint8_tAscii2Hex(A_puint8_tData[(4*i)+10]);
+		digit2 = HexParser_uint8_tAscii2Hex(A_puint8_tData[(4*i)+11]);
+		digit3 = HexParser_uint8_tAscii2Hex(A_puint8_tData[(4*i)+12]);
 
-		Data[itr]= (Digit3<<12)|(Digit2<<8)|(Digit1<<4)|(Digit0<<0);
+		DataBuffer[i] = (digit0 << 12)    |
+				        (digit1 << 8 )    |
+				        (digit2 << 4 )    |
+				        (digit3 << 0 );
+
 	}
 
-	MCALFMI_vFlashWrite(Address , Data, CC/2); /*Half word*/
+	MCALFMI_vFlashWrite(address,DataBuffer, CC/2); /*Half word*/
 
 }
+
+
 

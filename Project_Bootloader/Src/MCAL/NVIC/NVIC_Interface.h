@@ -52,8 +52,8 @@ typedef enum {
 	I2C1_ER							,
 	I2C2_EV							,
 	I2C2_ER							,
-	SPI1							,
-	SPI2							,
+	SPI1_NVIC						,
+	SPI2_NVIC						,
 	USART1							,
 	USART2							,
 	EXTI15_10 = 40  				,
@@ -62,7 +62,7 @@ typedef enum {
 	DMA1_Stream7 = 47				,
 	SDIO = 49						,
 	TIM5							,
-	SPI3							,
+	SPI3_NVIC						,
 	DMA2_Stream0 = 56				,
 	DMA2_Stream1					,
 	DMA2_Stream2					,
@@ -76,7 +76,7 @@ typedef enum {
 	I2C3_EV							,
 	I2C3_ER							,
 	FPU = 81						,
-	SPI4 = 84
+	SPI4_NVIC = 84
 }IRQn_t;
 
 

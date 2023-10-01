@@ -26,6 +26,7 @@ void MCAL_STK_Set_Interval_Periodic(uint32_t Ticks , void(*callBack)(void)); //i
 void MCAL_STK_Set_Interval_Single(uint32_t Ticks , void(*callBack)(void)); //interrupt timing (one time)
 uint32_t MCAL_STK_Get_ElapsedTime(void);
 uint32_t MCAL_STK_Get_RemainingTime(void);
+void MCAL_STK_StopInterval(void);
 /*********************************************************************************************/
 
 #endif /* MCAL_STK_STK_INTERFACE_H_ */

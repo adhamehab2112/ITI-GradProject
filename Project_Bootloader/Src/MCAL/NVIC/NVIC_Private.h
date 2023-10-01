@@ -49,11 +49,11 @@ typedef struct {
 								((IRQN>=EXTI9_5)&&(IRQN<=USART2))              || \
 							    ((IRQN>=EXTI15_10)&&(IRQN<=EXTI18_OTG_FS_WKUP))|| \
 								((IRQN==DMA1_Stream7))	 					   || \
-								((IRQN>=SDIO)&&(IRQN<=SPI3)) 				   || \
+								((IRQN>=SDIO)&&(IRQN<=SPI3_NVIC)) 				   || \
 								((IRQN>=DMA2_Stream0)&&(IRQN<=DMA2_Stream4))   || \
 								((IRQN>=OTG_FS)&&(IRQN<=I2C3_ER))              || \
 								((IRQN==FPU)) 			                       || \
-								((IRQN==SPI4)))
+								((IRQN==SPI4_NVIC)))
 /* this macro is used to check if the IRQ_ID is within the Vector table or no*/
 
 typedef enum {

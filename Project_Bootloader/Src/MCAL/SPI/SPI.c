@@ -92,12 +92,12 @@ void MCAL_SPI_Init(SPI_Registers_t* SPIx, SPI_Config_t* SPI_Config)
 	{
 		if(SPIx==SPI1)
 		{
-			MCAL_NVIC_EnableIRQ(SPI1_NVIC);
+			MCAL_NVIC_EnIRQ(SPI1_NVIC);
 
 		}
 		else if(SPIx==SPI2)
 		{
-			MCAL_NVIC_EnableIRQ(SPI2_NVIC);
+			MCAL_NVIC_EnIRQ(SPI2_NVIC);
 		}
 
 	}
@@ -112,12 +112,12 @@ void MCAL_SPI_DeInit(SPI_Registers_t* SPIx)
 	if(SPIx==SPI1)
 	{
 		MCAL_RCC_voidPeripheral_DIS(SPI1_PERIPHERAL, APB2_BUS);
-		MCAL_NVIC_DisableIRQ(SPI1_NVIC);
+		MCAL_NVIC_DisIRQ(SPI1_NVIC);
 	}
 	else if(SPIx==SPI2)
 	{
 		MCAL_RCC_voidPeripheral_DIS(SPI2_PERIPHERAL, APB1_BUS);
-		MCAL_NVIC_DisableIRQ(SPI2_NVIC);
+		MCAL_NVIC_DisIRQ(SPI2_NVIC);
 
 	}
 

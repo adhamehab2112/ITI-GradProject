@@ -8,6 +8,6 @@
 #ifndef MCAL_FMI_FMI_CONFIG_H_
 #define MCAL_FMI_FMI_CONFIG_H_
 
-#define APP_SECTOR			2
+#define APP_SECTOR			1
 
 #endif /* MCAL_FMI_FMI_CONFIG_H_ */

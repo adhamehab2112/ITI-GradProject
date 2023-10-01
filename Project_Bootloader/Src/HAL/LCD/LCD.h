@@ -25,8 +25,8 @@
 
 //-----------------------------
 //LCD Pins
-#define LCD_DATA_PORT		GPIOA
-#define LCD_COMM_PORT		GPIOA
+#define LCD_DATA_PORT		GPIOB
+#define LCD_COMM_PORT		GPIOB
 
 #define LCD_COMM_RS			GPIO_PIN_8
 #define LCD_COMM_RW			GPIO_PIN_9

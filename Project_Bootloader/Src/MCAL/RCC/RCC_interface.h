@@ -40,12 +40,17 @@ typedef struct {
 #define USART1_PERIPHERAL			4
 #define USART6_PERIPHERAL			5
 #define USART2_PERIPHERAL			17
+#define	SPI1_PERIPHERAL				12
+#define	SPI2_PERIPHERAL				14
+#define SPI3_PERIPHERAL				15
+#define FMI_PERIPHERAL				15
 
 //@ref : BUS_SELECT
 #define AHB1_BUS		0
 #define AHB2_BUS		1
 #define APB1_BUS		2
 #define APB2_BUS		3
+#define AHB1LP_BUS		4
 
 //@ref : PLL_IN_DIV_FACT_SELECT
 #define PLL_IN_DIV_FACT_2    (uint8_t)2

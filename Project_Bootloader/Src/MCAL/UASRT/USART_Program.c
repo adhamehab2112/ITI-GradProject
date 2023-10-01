@@ -317,14 +317,27 @@ void MCAL_UART_GPIO_SetPins(UART_Registers_t *UARTx)
 	}
 }
 
-void MCAL_UART_SendString(UART_Registers_t *UARTx , uint8_t Data[] , uint32_t length)
+void MCAL_UART_SendString(UART_Registers_t *UARTx , uint8_t *Data)
 {
-	for(uint32_t itr=0 ; itr<length ; itr++)
-	{
-		if(Data[itr] != '\n')
+	uint32_t itr = 0;
+
+		while(Data[itr] != '\0')
 		{
 			MCAL_UART_SendData(UARTx,&Data[itr]);
+			while((GET_BIT(UARTx->UART_SR, 6)) == 0);
+			itr++;
 		}
 
+}
+uint8_t MCAL_UART_Recive_Byte_Synch(UART_Registers_t *UARTx,uint8_t *DataBuffer)
+{
+	uint8_t FlagStatus = 0 ;
+
+	/*No Polling*/
+	if(GET_BIT(UARTx->UART_SR,RXNE))
+	{
+		*DataBuffer = UARTx->UART_DR;
+		FlagStatus = 1 ;
 	}
+	return FlagStatus;
 }

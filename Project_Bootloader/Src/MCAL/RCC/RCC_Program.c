@@ -94,6 +94,8 @@ void MCAL_RCC_voidPeripheral_EN(uint8_t Peripheral , uint8_t Bus)
 	break ;
 	case APB2_BUS : SET_BIT(RCC->RCC_APB2ENR, Peripheral);
 	break ;
+	case AHB1LP_BUS : SET_BIT(RCC->RCC_AHB1LPENR,Peripheral);
+	break;
 	}
 }
 /**================================================================

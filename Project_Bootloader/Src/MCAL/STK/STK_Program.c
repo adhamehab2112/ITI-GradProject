@@ -31,7 +31,7 @@ void MCAL_STK_Init(void)
 	/*2-Interrupt State*/
 	if(STK_IRQ_STATE == STK_IRQ_EN)
 	{
-		SET_BIT(STK->STK_CTRL,CTRL_CLKSOURCE);
+		SET_BIT(STK->STK_CTRL,CTRL_TICKINT);
 	}
 	else
 	{
@@ -101,6 +101,13 @@ uint32_t MCAL_STK_Get_RemainingTime(void)
 {
 	//Fadely wa2t 2ad eh
 	return STK->STK_VAL;
+}
+void MCAL_STK_StopInterval(void)
+{
+	/*Stop SYSTK*/
+	CLR_BIT(STK->STK_CTRL,CTRL_ENABLE);
+	/*Reset the Value Register*/
+	STK->STK_VAL = 0 ;
 }
 /*********************************************************************************************/
 
